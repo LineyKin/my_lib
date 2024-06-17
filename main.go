@@ -12,6 +12,8 @@ func main() {
 
 	// ручка для главной страницы
 	r.GET("/", hand_fs.FileServerHandler)
+	r.Static("/style", "./web/style")
+	r.Static("/js", "./web/js")
 
 	port := "1991"
 	fmt.Printf("http://localhost:%s/\n", port)
