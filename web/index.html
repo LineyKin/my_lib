@@ -9,15 +9,15 @@
         <title>моя библиотека</title>
     </head>
     <body>
-        <div id="mainWrap">
-            <h2>Библиотека</h2>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAuthorModal">
-                Добавить автора
-            </button>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBookModal">
-                Добавить книгу
-            </button>
-        </div>
+    <div id="mainWrap">
+        <h2>Библиотека</h2>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAuthorModal">
+            Добавить автора
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBookModal">
+            Добавить книгу
+        </button>
+    </div>
 
     <!-- Модальное окно добавления автора-->
     <div class="modal fade" id="addAuthorModal" tabindex="-1" aria-labelledby="addAuthorModalLabel" aria-hidden="true">
@@ -51,7 +51,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-              <button type="button" class="btn btn-primary">Сохранить</button>
+              <button id="saveAuthor" type="button" class="btn btn-primary">Сохранить</button>
             </div>
           </div>
         </div>
@@ -71,7 +71,14 @@
                     <tr>
                         <td>Автор</td>
                         <td>
-                            <input type="text" class="author">
+                            <input type="text" list="authors" class="author">
+                            <datalist id="authors">
+                                <option value="Дмитрий Глуховский" />
+                                <option value="Карл Маркс" />
+                                <option value="Николай Островский" />
+                                <option value="Вера Камша" />
+                                <option value="Николай Стариков" />
+                             </datalist>
                             <button id="addAuthorBtn" type="button" class="btn btn-primary">+</button>
                         </td>
                     </tr>
