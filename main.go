@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	hand_fs "my_lib/handlers/fileserver"
+	"my_lib/helpers/env"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -45,7 +46,7 @@ func main() {
 	// ручка добавления авторов
 	r.POST("api/author/add", addAuthor)
 
-	port := "1991"
+	port := env.GetPort()
 	fmt.Printf("http://localhost:%s/\n", port)
 	err := r.Run(":" + port)
 	if err != nil {
