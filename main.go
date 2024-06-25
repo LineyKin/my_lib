@@ -5,11 +5,15 @@ import (
 	hand_add "my_lib/handlers/addbook"
 	hand_fs "my_lib/handlers/fileserver"
 	"my_lib/helpers/env"
+	db "my_lib/models/db"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	// проверяем БД и в случае отсутствия создаём её с таблицей
+	db.Create()
+
 	r := gin.Default()
 
 	// ручка для главной страницы
