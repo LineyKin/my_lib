@@ -6,8 +6,8 @@ import (
 	env "github.com/joho/godotenv"
 )
 
-const port_key string = "TODO_PORT"
-const db_key string = "TODO_DBFILE"
+const port_key string = "PORT"
+const db_key string = "DBFILE"
 
 func getByKey(key string) string {
 	err := env.Load(".ENV")
