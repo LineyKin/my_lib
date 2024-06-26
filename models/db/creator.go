@@ -1,23 +1,11 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 
-	env "my_lib/helpers/env"
-
 	_ "modernc.org/sqlite"
 )
-
-const env_key string = "DBFILE"
-const driverName string = "sqlite"
-
-func getDbPath() string {
-	dbFileName := env.GetDbName()
-
-	return "./" + dbFileName
-}
 
 func Create() {
 	dbPath := getDbPath()
@@ -28,8 +16,8 @@ func Create() {
 		createDbFile(dbPath) // создаём файл БД, если его нет
 	}
 
-	//createTable() // создаём таблицу scheduler, если её нет
-
+	// создаём таблицу authors
+	createTableAuthors()
 }
 
 func createDbFile(dbPath string) {
@@ -39,26 +27,21 @@ func createDbFile(dbPath string) {
 	}
 }
 
-func GetConnection() (*sql.DB, error) {
-	return sql.Open(driverName, getDbPath())
-}
-
-func createTable() {
-	db, err := sql.Open(driverName, getDbPath())
+func createTableAuthors() {
+	db, err := GetConnection()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer db.Close()
 
-	sql := `CREATE TABLE IF NOT EXISTS scheduler (
+	sql := `CREATE TABLE IF NOT EXISTS authors (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		date CHAR(8) NOT NULL DEFAULT "",
-		title VARCHAR(256) NOT NULL DEFAULT "",
-		comment TEXT NOT NULL DEFAULT "",
-		repeat VARCHAR(128) NOT NULL DEFAULT ""
-	);
-	CREATE INDEX IF NOT EXISTS scheduler_date ON scheduler (date);`
+		name VARCHAR(256) NOT NULL DEFAULT "",
+		father_name VARCHAR(256) NOT NULL DEFAULT "",
+		last_name VARCHAR(256) NOT NULL DEFAULT ""
+		
+	);`
 
 	_, err = db.Exec(sql)
 	if err != nil {

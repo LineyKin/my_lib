@@ -1,4 +1,4 @@
-package addbook
+package add_book
 
 import (
 	"fmt"
@@ -21,9 +21,12 @@ func AddAuthor(c *gin.Context) {
 		return
 	}
 
+	fmt.Println(author.ID)
 	fmt.Println(author.Name)
 	fmt.Println(author.FatherName)
 	fmt.Println(author.LastName)
 
-	c.JSON(http.StatusOK, gin.H{"id": "1917"})
+	authorId, _ := author.Add()
+
+	c.JSON(http.StatusOK, gin.H{"id": authorId})
 }
