@@ -21,11 +21,6 @@ func AddAuthor(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(author.ID)
-	fmt.Println(author.Name)
-	fmt.Println(author.FatherName)
-	fmt.Println(author.LastName)
-
 	authorId, _ := author.Add()
 
 	c.JSON(http.StatusOK, gin.H{"id": authorId})

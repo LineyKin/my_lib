@@ -1,6 +1,7 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
 	"os"
 
@@ -16,8 +17,15 @@ func Create() {
 		createDbFile(dbPath) // создаём файл БД, если его нет
 	}
 
+	db, err := GetConnection()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer db.Close()
+
 	// создаём таблицу authors
-	createTableAuthors()
+	createTableAuthors(db)
 }
 
 func createDbFile(dbPath string) {
@@ -27,23 +35,16 @@ func createDbFile(dbPath string) {
 	}
 }
 
-func createTableAuthors() {
-	db, err := GetConnection()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer db.Close()
-
-	sql := `CREATE TABLE IF NOT EXISTS authors (
+func createTableAuthors(db *sql.DB) {
+	sql := `
+	CREATE TABLE IF NOT EXISTS authors (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		name VARCHAR(256) NOT NULL DEFAULT "",
 		father_name VARCHAR(256) NOT NULL DEFAULT "",
 		last_name VARCHAR(256) NOT NULL DEFAULT ""
-		
 	);`
 
-	_, err = db.Exec(sql)
+	_, err := db.Exec(sql)
 	if err != nil {
 		fmt.Println(err)
 	}
