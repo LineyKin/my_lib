@@ -11,6 +11,13 @@ import (
 )
 
 func main() {
+
+	//s := []rune("w")
+	////s := "1"
+	//
+	//fmt.Println(unicode.IsDigit(s[0]))
+	//
+	//return
 	// проверяем БД и в случае отсутствия создаём её с таблицей
 	db.Create()
 
