@@ -48,6 +48,8 @@
                         </td>
                     </tr>
                 </table>
+                <div id="addAuthSuccessMessage">Автор добавлен</div>
+                <div id="addAuthErrorMessage">Автор добавлен</div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
@@ -72,13 +74,7 @@
                         <td>Автор</td>
                         <td>
                             <input type="text" list="authors" class="author">
-                            <datalist id="authors">
-                                <option value="Дмитрий Глуховский" />
-                                <option value="Карл Маркс" />
-                                <option value="Николай Островский" />
-                                <option value="Вера Камша" />
-                                <option value="Николай Стариков" />
-                             </datalist>
+                            <datalist id="authors"></datalist>
                             <button id="addAuthorBtn" type="button" class="btn btn-primary">+</button>
                         </td>
                     </tr>
@@ -105,7 +101,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-              <button type="button" class="btn btn-primary">Сохранить</button>
+              <button type="button" id="saveBook" class="btn btn-primary">Сохранить</button>
             </div>
           </div>
         </div>

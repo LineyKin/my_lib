@@ -11,14 +11,6 @@ import (
 )
 
 func main() {
-
-	//s := []rune("w")
-	////s := "1"
-	//
-	//fmt.Println(unicode.IsDigit(s[0]))
-	//
-	//return
-	// проверяем БД и в случае отсутствия создаём её с таблицей
 	db.Create()
 
 	r := gin.Default()
@@ -30,6 +22,9 @@ func main() {
 
 	// ручка добавления авторов
 	r.POST("api/author/add", hand_add.AddAuthor)
+
+	// ручка выгрузки авторов для подсказки в форме добавления книги
+	r.GET("api/author/hint", hand_add.GetHint)
 
 	port := env.GetPort()
 	fmt.Printf("http://localhost:%s/\n", port)

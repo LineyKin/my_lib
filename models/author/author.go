@@ -11,10 +11,40 @@ const tableName string = "authors"
 type Author struct {
 	Id         string `json:"id"`
 	Name       string `json:"name"`
-	FatherName string `json:"fatherName"`
+	FatherName string `json:"fatherName,omitempty"`
 	LastName   string `json:"lastName"`
 }
 
+// список авторов без отчества
+func (a Author) GetHintList() ([]Author, error) {
+	db, err := db.GetConnection()
+	if err != nil {
+		return []Author{}, err
+	}
+	defer db.Close()
+
+	sql := fmt.Sprintf("SELECT id, name, last_name  FROM %s ORDER BY last_name", tableName)
+	rows, err := db.Query(sql)
+	if err != nil {
+		return []Author{}, err
+	}
+
+	list := []Author{}
+	for rows.Next() {
+		authorRow := Author{}
+		err := rows.Scan(&authorRow.Id, &authorRow.Name, &authorRow.LastName)
+
+		if err != nil {
+			return []Author{}, err
+		}
+
+		list = append(list, authorRow)
+	}
+
+	return list, nil
+}
+
+// добавление автора
 func (a Author) Add() (int, error) {
 	db, err := db.GetConnection()
 	if err != nil {
