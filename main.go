@@ -23,6 +23,9 @@ func main() {
 	// ручка добавления авторов
 	r.POST("api/author/add", hand_add.AddAuthor)
 
+	// ручка добавления книги
+	r.POST("api/bokk/add", hand_add.AddBook)
+
 	// ручка выгрузки авторов для подсказки в форме добавления книги
 	r.GET("api/author/hint", hand_add.GetHint)
 

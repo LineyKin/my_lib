@@ -48,7 +48,7 @@ $("#addWorkBtn").on("click", function() {
     workRow.after(`<tr>
         <td></td>
         <td>
-            <input type="text" class="work">
+            <input type="text" class="literaryWork">
             <button class="deleteWorkInput" type="button" class="btn btn-primary">-</button>
         </td>
     </tr>`)
@@ -62,11 +62,63 @@ $("#addWorkBtn").on("click", function() {
 $("#saveBook").on("click", function(){
 
     // получение списка id авторов
-    let authorList = $(".author")
-    authorList.each(function(){
-        let authorId = $('[name = "'+$(this).val()+'"]').data("id");
-        console.log(authorId)
+    let authorIdList = [];
+    $(".author").each(function(){
+        let authorId = $('#authors [name = "'+$(this).val()+'"]').data("id");
+        if(typeof(authorId) == "undefined") {
+            authorId = 0;
+        }
+        authorIdList.push(authorId)
     });
+
+    // получение списка литературных произведений.
+    // элемент списка - ассоциативный массив id-name.
+    // если произведение добавляется впервые, то id=0
+    //
+    // id нужно для 
+    // - связки одного произведения с разными физическими носителями
+    // например, "Чук и Гек" изданый "Детиздатом" в 1953 и изданый АСТ в 2024.
+    // - для различения книг разных авторов с одним названием, например "Немезида" А.Кристи и А.Азимова
+    // 
+    let literaryWorkList = [];
+    $(".literaryWork").each(function(){
+        let literaryWorkName = $(this).val()
+        let literaryWorkId = $('#literaryWorks [name = "'+literaryWorkName+'"]').data("id")
+        if(typeof(literaryWorkId) == "undefined") {
+            literaryWorkId = 0;
+        }
+
+        let literaryWork = {
+            id: literaryWorkId, 
+            name: literaryWorkName
+        }
+        
+        literaryWorkList.push(literaryWork)
+    });
+
+    // получение издательства
+    let publishingHouseName = $("#publishingHouse").val()
+    let publishingHouseId = $('#publishingHouses [name = "'+publishingHouseName+'"]').data("id")
+    if(typeof(publishingHouseId) == "undefined") {
+        publishingHouseId = 0
+    }
+    let publishingHouse = {
+        id : publishingHouseId,
+        name: publishingHouseName
+    }
+
+    // получение года
+    let publishingYear = $("#publishingYear").val()
+
+    // данные для отправки в post-запрос
+    let bookData = {
+        authorIdList: authorIdList,
+        literaryWorkList: literaryWorkList,
+        publishingHouse: publishingHouse,
+        publishingYear: publishingYear
+    }
+
+    console.log(bookData)
 });
 
 // добавление автора
