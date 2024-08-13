@@ -28,5 +28,5 @@ func AddBook(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"ids": response})
+	c.JSON(http.StatusOK, gin.H{"book": response})
 }

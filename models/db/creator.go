@@ -53,7 +53,7 @@ func createDbFile(dbPath string) {
 // связная таблица литературных произведений и физических книг
 func createTableLiteraryWorkAndBook(db *sql.DB) {
 	sql := `
-	CREATE TABLE IF NOT EXISTS author_and_literary_work (
+	CREATE TABLE IF NOT EXISTS book_and_literary_work (
 		literary_work_id INTEGER,
 		book_id INTEGER
 	);`

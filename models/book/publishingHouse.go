@@ -11,7 +11,7 @@ type PublishingHouse struct {
 	Name string
 }
 
-const tableName string = "publishing_house"
+const phTableName string = "publishing_house"
 
 func (ph PublishingHouse) isEmpty() bool {
 	if ph.Id == 0 && ph.Name == "" {
@@ -37,7 +37,7 @@ func (ph *PublishingHouse) Add() error {
 	defer db.Close()
 
 	sqlPattern := `INSERT INTO %s (name) VALUES(:name)`
-	sqlPattern = fmt.Sprintf(sqlPattern, tableName)
+	sqlPattern = fmt.Sprintf(sqlPattern, phTableName)
 	res, err := db.Exec(
 		sqlPattern,
 		sql.Named("name", ph.Name))

@@ -85,7 +85,7 @@ $("#saveBook").on("click", function(){
         let literaryWorkName = $(this).val()
         let literaryWorkId = $('#literaryWorks [name = "'+literaryWorkName+'"]').data("id")
         if(typeof(literaryWorkId) == "undefined") {
-            literaryWorkId = "";
+            literaryWorkId = 0;
         }
 
         let literaryWork = {
@@ -127,6 +127,9 @@ $("#saveBook").on("click", function(){
         data: JSON.stringify(bookData),
         success: function (response) {
             console.log(response)
+        },
+        error: function (errorResponse) {
+            console.log(errorResponse)
         }
     })
 });
