@@ -85,7 +85,7 @@ $("#saveBook").on("click", function(){
         let literaryWorkName = $(this).val()
         let literaryWorkId = $('#literaryWorks [name = "'+literaryWorkName+'"]').data("id")
         if(typeof(literaryWorkId) == "undefined") {
-            literaryWorkId = 0;
+            literaryWorkId = "";
         }
 
         let literaryWork = {
@@ -112,13 +112,23 @@ $("#saveBook").on("click", function(){
 
     // данные для отправки в post-запрос
     let bookData = {
-        authorIdList: authorIdList,
-        literaryWorkList: literaryWorkList,
+        author: authorIdList,
+        name: literaryWorkList,
         publishingHouse: publishingHouse,
         publishingYear: publishingYear
     }
 
     console.log(bookData)
+
+    $.ajax({
+        type: "POST",
+        url: "api/book/add",
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(bookData),
+        success: function (response) {
+            console.log(response)
+        }
+    })
 });
 
 // добавление автора
