@@ -11,7 +11,7 @@ $( document ).ready(function() {
                 
                 let authorId = data[i].id
                 let author = data[i].name +" "+ data[i].lastName
-                optionTag = '<option name="'+author+'" data-id="'+authorId+'">'+author+'</option>';
+                optionTag = createOptionForDatalist(authorId, author);
                 $("#authors").append(optionTag)
             }
         },
@@ -23,7 +23,34 @@ $( document ).ready(function() {
             alert(message)
         }
     });
+
+    // выгрузка списка издательств в datalist
+    $.ajax({
+        type: "GET",
+        url: "api/publishingHouse/list",
+        contentType: 'application/json; charset=utf-8',
+        success: function (response) {
+            let data = response.ph_list
+            console.log(data)
+            let phCount = data.length
+            for (let i=0; i< phCount; i++) {
+                optionTag = createOptionForDatalist(data[i].id, data[i].name);
+                $("#publishingHouses").append(optionTag)
+            }
+        },
+        error: function (errorResponse) {
+            let status = errorResponse.status + " " + errorResponse.statusText
+            let errorText = errorResponse.responseJSON.error
+            let message = "Ошибка выгрузки списка-подсказки издательств. Статус: " + status + ". Ошибка: " + errorText
+            console.log(message)
+            alert(message)
+        }
+    });
 });
+
+function createOptionForDatalist(id, name) {
+    return '<option name="'+name+'" data-id="'+id+'">'+name+'</option>';
+}
 
 // кнопка, добавляющая ещё одно поле для автора, если у книги несколько авторов
 $("#addAuthorBtn").on("click", function() {

@@ -7,11 +7,40 @@ import (
 )
 
 type PublishingHouse struct {
-	Id   int
-	Name string
+	Id   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 const phTableName string = "publishing_house"
+
+// список издательств
+func (ph PublishingHouse) GetList() ([]PublishingHouse, error) {
+	db, err := db.GetConnection()
+	if err != nil {
+		return []PublishingHouse{}, err
+	}
+	defer db.Close()
+
+	sql := fmt.Sprintf("SELECT * FROM %s ORDER BY name", phTableName)
+	rows, err := db.Query(sql)
+	if err != nil {
+		return []PublishingHouse{}, err
+	}
+
+	list := []PublishingHouse{}
+	for rows.Next() {
+		phRow := PublishingHouse{}
+		err := rows.Scan(&phRow.Id, &phRow.Name)
+
+		if err != nil {
+			return []PublishingHouse{}, err
+		}
+
+		list = append(list, phRow)
+	}
+
+	return list, nil
+}
 
 func (ph PublishingHouse) isEmpty() bool {
 	if ph.Id == 0 && ph.Name == "" {

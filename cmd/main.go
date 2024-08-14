@@ -29,6 +29,9 @@ func main() {
 	// ручка выгрузки авторов для подсказки в форме добавления книги
 	r.GET("api/author/hint", hand_add.GetHint)
 
+	// ручка выгрузки списка издательств
+	r.GET("api/publishingHouse/list", hand_add.GetPublishingHouseList)
+
 	port := env.GetPort()
 	fmt.Printf("http://localhost:%s/\n", port)
 	err := r.Run(":" + port)
