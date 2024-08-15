@@ -31,7 +31,6 @@ $( document ).ready(function() {
         contentType: 'application/json; charset=utf-8',
         success: function (response) {
             let data = response.ph_list
-            console.log(data)
             let phCount = data.length
             for (let i=0; i< phCount; i++) {
                 optionTag = createOptionForDatalist(data[i].id, data[i].name);
@@ -144,9 +143,6 @@ $("#saveBook").on("click", function(){
         publishingHouse: publishingHouse,
         publishingYear: publishingYear
     }
-
-    console.log(bookData)
-
     $.ajax({
         type: "POST",
         url: "api/book/add",
@@ -154,6 +150,17 @@ $("#saveBook").on("click", function(){
         data: JSON.stringify(bookData),
         success: function (response) {
             console.log(response)
+            // очистка формы
+            $(".author").each(function(){
+                $(this).val("")
+            });
+
+            $(".literaryWork").each(function(){
+                $(this).val("")
+            });
+
+            $("#publishingHouse").val("")
+            $("#publishingYear").val("")
         },
         error: function (errorResponse) {
             console.log(errorResponse)
@@ -176,23 +183,23 @@ $("#saveAuthor").on("click", function() {
         data: JSON.stringify(authorData),
         success: function (response) {
         
-        // очистка формы
-        $("#authorName").val(""),
-        $("#authorFatherName").val(""),
-        $("#authorLastName").val("")
+            // очистка формы
+            $("#authorName").val(""),
+            $("#authorFatherName").val(""),
+            $("#authorLastName").val("")
 
-        // сообщение, что автор добавлен
-        let message = "Автор " + authorData.name + " " + authorData.lastName + " добавлен"
-        console.log(message)
-        $("#addAuthSuccessMessage").show()
-        $("#addAuthSuccessMessage").html(message)
-        $("#addAuthSuccessMessage").hide(20000)
+            // сообщение, что автор добавлен
+            let message = "Автор " + authorData.name + " " + authorData.lastName + " добавлен"
+            console.log(message)
+            $("#addAuthSuccessMessage").show()
+            $("#addAuthSuccessMessage").html(message)
+            $("#addAuthSuccessMessage").hide(20000)
 
-        // обновление datalist
-        let authorId = response.id
-        let author = authorData.name +" "+ authorData.lastName
-        optionTag = '<option name="'+author+'" data-id="'+authorId+'">'+author+'</option>';
-        $("#authors").append(optionTag)
+            // обновление datalist
+            let authorId = response.id
+            let author = authorData.name +" "+ authorData.lastName
+            optionTag = '<option name="'+author+'" data-id="'+authorId+'">'+author+'</option>';
+            $("#authors").append(optionTag)
 
         },
         error: function (errorResponse) {
