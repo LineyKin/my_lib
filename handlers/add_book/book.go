@@ -14,7 +14,7 @@ func AddBook(c *gin.Context) {
 		return
 	}
 
-	var book book.Book
+	var book book.BookAdd
 	if err := c.BindJSON(&book); err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Ошибка десериализации JSON"})

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	hand_add "my_lib/handlers/add_book"
 	hand_fs "my_lib/handlers/fileserver"
+	hand_unload "my_lib/handlers/unload"
 	"my_lib/helpers/env"
 	db "my_lib/models/db"
 
@@ -22,6 +23,12 @@ func main() {
 
 	// ручка добавления авторов
 	r.POST("api/author/add", hand_add.AddAuthor)
+
+	// ручка для выгрузки списка книг
+	r.GET("api/book/list", hand_unload.GetBookList)
+
+	// ручка для выгрузки количества книг
+	r.GET("api/book/count", hand_unload.GetBookCount)
 
 	// ручка добавления книги
 	r.POST("api/book/add", hand_add.AddBook)

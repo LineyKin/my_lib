@@ -8,28 +8,112 @@ import (
 )
 
 type Book struct {
-	Id              int             `json:"id,omitempty"`
+	Id             int    `json:"id,omitempty"`
+	PublishingYear string `json:"publishingYear"`
+}
+
+// формат добавления
+type BookAdd struct {
+	Book
 	Name            []LiteraryWork  `json:"name"`
 	Author          []int           `json:"author"`
 	PublishingHouse PublishingHouse `json:"publishingHouse"`
-	PublishingYear  string          `json:"publishingYear"`
+}
+
+// формат чтения из списка
+type BookUnload struct {
+	Book
+	Name            string `json:"name"`
+	Author          string `json:"author"`
+	PublishingHouse string `json:"publishingHouse"`
+}
+
+type ListParam struct {
+	Limit  int `json:"limit"`
+	Offset int `json:"offset"`
 }
 
 const tableName = "book"
 
-// добавление книги
-
-// возвращает id издательства и произведения
-func (b Book) Add() (Book, error) {
+func (*Book) Count() (int, error) {
 	db, err := db.GetConnection()
 	if err != nil {
-		return Book{}, err
+		return 0, err
+	}
+	defer db.Close()
+
+	sql := `SELECT COUNT(*) AS count FROM book`
+	row, err := db.Query(sql)
+	if err != nil {
+		return 0, err
+	}
+
+	var count int
+
+	row.Next()
+	err = row.Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (b BookUnload) GetList(lp ListParam) ([]BookUnload, error) {
+	db, err := db.GetConnection()
+	if err != nil {
+		return []BookUnload{}, err
+	}
+	defer db.Close()
+	sqlPattern := `
+	SELECT
+ 		b.id AS id,
+ 		GROUP_CONCAT(IFNULL(a.name || ' ' || a.last_name, '-'), ', ') AS author,
+ 		lw.name AS name,
+ 		ph.name AS publishing_house,
+ 		b.year_of_publication
+	FROM book AS b
+	LEFT JOIN publishing_house AS ph ON ph.id = b.publishing_house_id
+	LEFT JOIN book_and_literary_work AS blw ON blw.book_id = b.id
+	LEFT JOIN literary_work AS lw ON lw.id = blw.literary_work_id
+	LEFT JOIN author_and_literary_work AS alw ON alw.literary_work_id = lw.id
+	LEFT JOIN authors AS a ON a.id = alw.author_id
+	GROUP BY b.id
+	ORDER BY a.last_name, lw.name
+	LIMIT %d OFFSET %d;`
+	sql := fmt.Sprintf(sqlPattern, lp.Limit, lp.Offset)
+	rows, err := db.Query(sql)
+	if err != nil {
+		return []BookUnload{}, err
+	}
+
+	list := []BookUnload{}
+	for rows.Next() {
+		bRow := BookUnload{}
+		err := rows.Scan(&bRow.Id, &bRow.Author, &bRow.Name, &bRow.PublishingHouse, &bRow.PublishingYear)
+
+		if err != nil {
+			return []BookUnload{}, err
+		}
+
+		list = append(list, bRow)
+	}
+
+	return list, nil
+
+}
+
+// возвращает BookAdd
+func (b BookAdd) Add() (BookAdd, error) {
+	db, err := db.GetConnection()
+	if err != nil {
+		return BookAdd{}, err
 	}
 	defer db.Close()
 
 	// работа с издательством, проверка на пустоту
 	if b.PublishingHouse.isEmpty() {
-		return Book{}, errors.New("поле 'Издательство' не заполнено")
+		return BookAdd{}, errors.New("поле 'Издательство' не заполнено")
 	}
 
 	// для нового издательства получаем id (publishing_house_id)
@@ -38,7 +122,7 @@ func (b Book) Add() (Book, error) {
 	if b.PublishingHouse.isNew() {
 		err = b.PublishingHouse.Add()
 		if err != nil {
-			return Book{}, err
+			return BookAdd{}, err
 		}
 	}
 
@@ -46,12 +130,12 @@ func (b Book) Add() (Book, error) {
 	// получим id книги
 	err = b.addPhysicalBook()
 	if err != nil {
-		return Book{}, err
+		return BookAdd{}, err
 	}
 
 	// 2. работа с литературным произведением
 	if isEmptyNameList(b.Name) {
-		return Book{}, errors.New("поле 'Название' не заполнено")
+		return BookAdd{}, errors.New("поле 'Название' не заполнено")
 	}
 
 	// перебираем литературные произведения
@@ -66,7 +150,7 @@ func (b Book) Add() (Book, error) {
 		if lw.isNew() {
 			err = lw.Add()
 			if err != nil {
-				return Book{}, err
+				return BookAdd{}, err
 			}
 		}
 
@@ -80,7 +164,7 @@ func (b Book) Add() (Book, error) {
 		)
 
 		if err != nil {
-			return Book{}, err
+			return BookAdd{}, err
 		}
 
 		// author_and_literary_work
@@ -93,7 +177,7 @@ func (b Book) Add() (Book, error) {
 			)
 
 			if err != nil {
-				return Book{}, err
+				return BookAdd{}, err
 			}
 		}
 
@@ -103,7 +187,7 @@ func (b Book) Add() (Book, error) {
 }
 
 // добавление физической книги
-func (b *Book) addPhysicalBook() error {
+func (b *BookAdd) addPhysicalBook() error {
 	db, err := db.GetConnection()
 	if err != nil {
 		return err
