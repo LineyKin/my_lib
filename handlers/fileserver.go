@@ -1,4 +1,4 @@
-package fileserver
+package handlers
 
 import (
 	"path/filepath"
@@ -9,7 +9,7 @@ import (
 
 const webDir = "web"
 
-func FileServerHandler(c *gin.Context) {
+func (ctrl *Controller) FileServer(c *gin.Context) {
 	filePath := filepath.Join(webDir, strings.TrimPrefix(c.Request.URL.Path, "/"))
 	c.File(filePath)
 }

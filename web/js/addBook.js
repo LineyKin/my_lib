@@ -2,7 +2,7 @@ $( document ).ready(function(){
     getAuthorHint()
     getPublishingHouseHint()
     buildPaginator()
-    getDefaultBookList()
+    getBookList(1)
 });
 
 
@@ -141,6 +141,8 @@ $("#saveAuthor").on("click", function() {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(authorData),
         success: function (response) {
+
+            console.log(response)
         
             // очистка формы
             $("#authorName").val(""),
@@ -155,7 +157,7 @@ $("#saveAuthor").on("click", function() {
             $("#addAuthSuccessMessage").hide(20000)
 
             // обновление datalist
-            let authorId = response.id
+            let authorId = response.author_id
             let author = authorData.name +" "+ authorData.lastName
             optionTag = '<option name="'+author+'" data-id="'+authorId+'">'+author+'</option>';
             $("#authors").append(optionTag)

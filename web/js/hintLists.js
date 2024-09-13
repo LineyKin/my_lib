@@ -5,7 +5,7 @@ function getAuthorHint() {
         url: "api/author/hint",
         contentType: 'application/json; charset=utf-8',
         success: function (response) {
-            let data = response.hint_list
+            let data = response.author_list
             let authorCount = data.length
             for (let i=0; i< authorCount; i++) {
                 
