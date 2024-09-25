@@ -17,6 +17,7 @@ type StorageInterface interface {
 	GetPublishingHouseList() ([]book.PublishingHouse, error)
 	GetBookCount() (int, error)
 	GetBookList(limit, offset int) ([]book.BookUnload, error)
+	GetAuthorByName(a author.Author) ([]int, error)
 }
 
 type Storage struct {

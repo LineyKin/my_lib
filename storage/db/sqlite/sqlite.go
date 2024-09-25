@@ -131,6 +131,36 @@ func (s *SqliteStorage) GetBookList(limit, offset int) ([]book.BookUnload, error
 	return list, nil
 }
 
+func (s *SqliteStorage) GetAuthorByName(a author.Author) ([]int, error) {
+	q := `SELECT id FROM authors 
+			WHERE name=:name
+			AND father_name=:father_name
+			AND last_name=:last_name`
+
+	rows, err := s.db.Query(q,
+		sql.Named("name", a.Name),
+		sql.Named("father_name", a.FatherName),
+		sql.Named("last_name", a.LastName),
+	)
+	list := []int{}
+	if err != nil {
+		return list, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		err = rows.Scan(&id)
+		if err != nil {
+			return list, err
+		}
+
+		list = append(list, int(id))
+	}
+
+	return list, nil
+}
+
 func (s *SqliteStorage) GetAuthorList() ([]author.Author, error) {
 	q := `SELECT * FROM authors ORDER BY last_name`
 
