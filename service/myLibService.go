@@ -128,7 +128,7 @@ func (s *myLibService) addPublishingHouse(b *book.BookAdd) error {
 
 func (s *myLibService) AddAuthor(a author.Author) (int, error) {
 
-	isExists, err := s.isAuthorExists(a)
+	isExists, err := s.IsAuthorExists(a)
 	if err != nil {
 		return 0, err
 	}
@@ -145,7 +145,7 @@ func (s *myLibService) AddAuthor(a author.Author) (int, error) {
 
 // проверяем, не заносили ли мы уже этого автора в БД
 // исходим из того, что полные тёски среди авторов редкость
-func (s *myLibService) isAuthorExists(a author.Author) (bool, error) {
+func (s *myLibService) IsAuthorExists(a author.Author) (bool, error) {
 	idList, err := s.storage.GetAuthorByName(a)
 	if err != nil {
 		return false, err
@@ -161,7 +161,7 @@ func (s *myLibService) isAuthorExists(a author.Author) (bool, error) {
 		return true, nil
 	}
 
-	return true, fmt.Errorf("Обнаружены дубликаты автора %s", a.GetName())
+	return true, fmt.Errorf("обнаружены дубликаты автора %s", a.GetName())
 }
 
 func (s *myLibService) GetAuthorList() ([]author.Author, error) {

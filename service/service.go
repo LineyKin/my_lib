@@ -13,6 +13,7 @@ type ServiceInterface interface {
 	GetPublishingHouseList() ([]book.PublishingHouse, error)
 	GetBookCount() (int, error)
 	GetBookList(limit, offset int) ([]book.BookUnload, error)
+	IsAuthorExists(a author.Author) (bool, error)
 }
 
 type Service struct {

@@ -12,6 +12,11 @@ const db_key string = "DBFILE"
 func getByKey(key string) string {
 	err := env.Load(".ENV")
 
+	// костыль для тестов
+	if err != nil {
+		err = env.Load("../.ENV")
+	}
+
 	if err != nil {
 		panic("Невозможно загрузить .ENV")
 	}
