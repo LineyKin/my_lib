@@ -1,4 +1,6 @@
-package service
+package tests
+
+// go test -count=1 ./tests
 
 import (
 	"database/sql"
