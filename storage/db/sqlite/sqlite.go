@@ -93,7 +93,7 @@ func (s *SqliteStorage) LinkBookAndLiteraryWork(lwId, bookId int) error {
 }
 
 func (s *SqliteStorage) GetBookList(limit, offset int) ([]book.BookUnload, error) {
-	qPattern := `
+	q := `
 	SELECT
  		b.id AS id,
  		GROUP_CONCAT(IFNULL(a.last_name || ' ' || a.name, '-'), ', ') AS author,
@@ -108,9 +108,9 @@ func (s *SqliteStorage) GetBookList(limit, offset int) ([]book.BookUnload, error
 	LEFT JOIN authors AS a ON a.id = alw.author_id
 	GROUP BY b.id
 	ORDER BY a.last_name, lw.name
-	LIMIT %d OFFSET %d;`
-	q := fmt.Sprintf(qPattern, limit, offset)
-	rows, err := s.db.Query(q)
+	LIMIT :limit OFFSET :offset;`
+
+	rows, err := s.db.Query(q, sql.Named("limit", limit), sql.Named("offset", offset))
 	if err != nil {
 		return []book.BookUnload{}, err
 	}
