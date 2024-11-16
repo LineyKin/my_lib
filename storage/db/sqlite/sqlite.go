@@ -107,10 +107,17 @@ func (s *SqliteStorage) GetBookList(limit, offset int) ([]book.BookUnload, error
 	LEFT JOIN author_and_literary_work AS alw ON alw.literary_work_id = lw.id
 	LEFT JOIN authors AS a ON a.id = alw.author_id
 	GROUP BY b.id
-	ORDER BY a.last_name, lw.name
+	ORDER BY :sortedField
 	LIMIT :limit OFFSET :offset;`
 
-	rows, err := s.db.Query(q, sql.Named("limit", limit), sql.Named("offset", offset))
+	// a.last_name, lw.name
+
+	sortedField := "b.year_of_publication"
+	rows, err := s.db.Query(q,
+		sql.Named("limit", limit),
+		sql.Named("offset", offset),
+		sql.Named("sortedField", sortedField),
+	)
 	if err != nil {
 		return []book.BookUnload{}, err
 	}
