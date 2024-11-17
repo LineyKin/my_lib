@@ -12,7 +12,7 @@ type ServiceInterface interface {
 	AddBook(b book.BookAdd) (book.BookAdd, error)
 	GetPublishingHouseList() ([]book.PublishingHouse, error)
 	GetBookCount() (int, error)
-	GetBookList(limit, offset int) ([]book.BookUnload, error)
+	GetBookList(limit, offset int, sortedBy, sortType string) ([]book.BookUnload, error)
 	IsAuthorExists(a author.Author) (bool, error)
 }
 

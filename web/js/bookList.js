@@ -15,20 +15,34 @@ function buildPaginator() {
 
     $("#bookListPagination .page-item").on("click", function(){
         let paginatorNumber = $(this).find("a").html()
-        getBookList(paginatorNumber)
+
+        let sortedBy, sortType
+        $("#bookListTable th").each(function(){
+            if($(this).attr("isSorted") != undefined) {
+                sortedBy = $(this).attr("name")
+                sortType = $(this).attr("isSorted")
+            }
+        })
+
+        getBookList(paginatorNumber, sortedBy, sortType)
     })
 }
 
-function getBookList(paginatorNumber) {
+function getBookList(paginatorNumber, sortedBy, sortType) {
 
     let offset = rowsLimit * (paginatorNumber - 1)
+
+    console.log("sortedBy " + sortedBy)
+    console.log("sortType " + sortType)
 
     // Выгрузка списка книг по умолчанию
     $.ajax({
         type: "GET",
         data: {
             limit: rowsLimit,
-            offset: offset
+            offset: offset,
+            sortedBy: sortedBy,
+            sortType: sortType,
         },
         url: "api/book/list",
         success: function (response) {

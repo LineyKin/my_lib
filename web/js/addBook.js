@@ -2,7 +2,7 @@ $( document ).ready(function(){
     getAuthorHint()
     getPublishingHouseHint()
     buildPaginator()
-    getBookList(1)
+    getBookList(1, "author", "asc")
 });
 
 

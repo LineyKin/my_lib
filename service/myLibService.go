@@ -18,8 +18,8 @@ func NewService(s sqlite.StorageInterface) *myLibService {
 	}
 }
 
-func (s *myLibService) GetBookList(limit, offset int) ([]book.BookUnload, error) {
-	return s.storage.GetBookList(limit, offset)
+func (s *myLibService) GetBookList(limit, offset int, sortedBy, sortType string) ([]book.BookUnload, error) {
+	return s.storage.GetBookList(limit, offset, sortedBy, sortType)
 }
 
 func (s *myLibService) AddBook(b book.BookAdd) (book.BookAdd, error) {

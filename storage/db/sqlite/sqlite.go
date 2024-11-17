@@ -92,7 +92,27 @@ func (s *SqliteStorage) LinkBookAndLiteraryWork(lwId, bookId int) error {
 	return nil
 }
 
-func (s *SqliteStorage) GetBookList(limit, offset int) ([]book.BookUnload, error) {
+func getOrderBy(sortedBy, sortType string) string {
+
+	if !(sortType == "asc" || sortType == "desc") {
+		sortType = "asc"
+	}
+
+	switch sortedBy {
+	case "author":
+		return fmt.Sprintf("a.last_name %s, lw.name", sortType)
+	case "name":
+		return "lw.name " + sortType
+	case "publishingHouse":
+		return "ph.name " + sortType
+	case "publishingYear":
+		return "b.year_of_publication " + sortType
+	default:
+		return "a.last_name, lw.name"
+	}
+}
+
+func (s *SqliteStorage) GetBookList(limit, offset int, sortedBy, sortType string) ([]book.BookUnload, error) {
 	q := `
 	SELECT
  		b.id AS id,
@@ -107,17 +127,17 @@ func (s *SqliteStorage) GetBookList(limit, offset int) ([]book.BookUnload, error
 	LEFT JOIN author_and_literary_work AS alw ON alw.literary_work_id = lw.id
 	LEFT JOIN authors AS a ON a.id = alw.author_id
 	GROUP BY b.id
-	ORDER BY :sortedField
+	ORDER BY %s
 	LIMIT :limit OFFSET :offset;`
 
-	// a.last_name, lw.name
+	query := fmt.Sprintf(q, getOrderBy(sortedBy, sortType))
 
-	sortedField := "b.year_of_publication"
-	rows, err := s.db.Query(q,
+	rows, err := s.db.Query(
+		query,
 		sql.Named("limit", limit),
 		sql.Named("offset", offset),
-		sql.Named("sortedField", sortedField),
 	)
+
 	if err != nil {
 		return []book.BookUnload{}, err
 	}
