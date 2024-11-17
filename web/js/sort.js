@@ -2,7 +2,6 @@ let asc = "asc"
 let desc = "desc"
 
 $("#bookListTable th").on("click", function(){
-  
     if ($(this).attr("isSorted") == undefined) {
         // удаляем признаки сортировки на старом столбце
         $("#bookListTable th").each(function(){
@@ -10,12 +9,10 @@ $("#bookListTable th").on("click", function(){
                 $(this).find("#sortIcon").remove()
                 $(this).removeAttr("isSorted")
             }
-            
         });
 
         $(this).html($(this).html()+sortIconUp()) 
         $(this).attr("isSorted", asc)
-
     } else {
         $(this).find("#sortIcon").remove()
         if ($(this).attr("isSorted") == asc) {
@@ -27,13 +24,7 @@ $("#bookListTable th").on("click", function(){
         }
     }
 
-    let sortBy = $(this).attr("name")
-    let sortType = $(this).attr("isSorted")
-
-    console.log("sortBy " + sortBy)
-    console.log("sortType " + sortType)
-
-    getBookList(1, sortBy,sortType)
+    getBookList(1, $(this).attr("name"), $(this).attr("isSorted"))
 })
 
 

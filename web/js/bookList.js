@@ -32,10 +32,7 @@ function getBookList(paginatorNumber, sortedBy, sortType) {
 
     let offset = rowsLimit * (paginatorNumber - 1)
 
-    console.log("sortedBy " + sortedBy)
-    console.log("sortType " + sortType)
-
-    // Выгрузка списка книг по умолчанию
+    // Выгрузка списка книг
     $.ajax({
         type: "GET",
         data: {

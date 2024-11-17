@@ -116,8 +116,8 @@ func (s *SqliteStorage) GetBookList(limit, offset int, sortedBy, sortType string
 	q := `
 	SELECT
  		b.id AS id,
- 		GROUP_CONCAT(IFNULL(a.last_name || ' ' || a.name, '-'), ', ') AS author,
- 		lw.name AS name,
+ 		GROUP_CONCAT(DISTINCT IFNULL(a.last_name || ' ' || a.name, '-')) AS author,
+ 		GROUP_CONCAT(DISTINCT lw.name) AS name,
  		ph.name AS publishing_house,
  		b.year_of_publication
 	FROM book AS b
