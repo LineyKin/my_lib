@@ -5,10 +5,10 @@ package tests
 import (
 	"database/sql"
 	"log"
+	"my_lib/internal/service"
+	"my_lib/internal/storage/db/sqlite"
 	"my_lib/lib/env"
 	"my_lib/models/author"
-	"my_lib/service"
-	"my_lib/storage/db/sqlite"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

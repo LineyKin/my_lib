@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"my_lib/service"
+	"my_lib/internal/service"
 
 	"github.com/gin-gonic/gin"
 )

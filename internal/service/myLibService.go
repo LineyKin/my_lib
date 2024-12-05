@@ -3,9 +3,9 @@ package service
 import (
 	"errors"
 	"fmt"
+	"my_lib/internal/storage/db/sqlite"
 	"my_lib/models/author"
 	"my_lib/models/book"
-	"my_lib/storage/db/sqlite"
 )
 
 type myLibService struct {

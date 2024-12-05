@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"my_lib/handlers"
+	"my_lib/internal/handlers"
+	"my_lib/internal/service"
+	"my_lib/internal/storage/db/sqlite"
 	"my_lib/lib/env"
-	"my_lib/service"
-	"my_lib/storage/db/sqlite"
 
 	"github.com/gin-gonic/gin"
 )
