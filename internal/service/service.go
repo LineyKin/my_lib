@@ -1,9 +1,9 @@
 package service
 
 import (
+	"my_lib/internal/storage/db/sqlite"
 	"my_lib/models/author"
 	"my_lib/models/book"
-	"my_lib/storage/db/sqlite"
 )
 
 type ServiceInterface interface {

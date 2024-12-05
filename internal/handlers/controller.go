@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"fmt"
+	"my_lib/internal/service"
 	"my_lib/models/author"
 	"my_lib/models/book"
-	"my_lib/service"
 	"net/http"
 	"strconv"
 
