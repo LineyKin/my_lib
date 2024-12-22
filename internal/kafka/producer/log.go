@@ -1,24 +1,13 @@
 package producer
 
 import (
-	"fmt"
 	"log"
-	"my_lib/lib/env"
 
 	"github.com/IBM/sarama"
 )
 
-func ConnectProducer(brokers []string) (sarama.SyncProducer, error) {
-	config := sarama.NewConfig()
-	config.Producer.Return.Successes = true
-	config.Producer.RequiredAcks = sarama.WaitForAll
-	config.Producer.Retry.Max = 5
-
-	return sarama.NewSyncProducer(brokers, config)
-}
-
 func PushLogToQueue(topic string, message []byte) error {
-	brokers := []string{fmt.Sprintf("localhost:%s", env.GetKafkaPort())}
+	brokers := getBrokers()
 	// Create connection
 	producer, err := ConnectProducer(brokers)
 	if err != nil {
