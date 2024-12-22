@@ -28,7 +28,7 @@ function buildPaginator() {
     })
 }
 
-function getBookList(paginatorNumber, sortedBy, sortType) {
+function getBookList(paginatorNumber, sortedBy, sortType, isAuto=false) {
 
     let offset = rowsLimit * (paginatorNumber - 1)
 
@@ -40,6 +40,7 @@ function getBookList(paginatorNumber, sortedBy, sortType) {
             offset: offset,
             sortedBy: sortedBy,
             sortType: sortType,
+            isAuto: isAuto,
         },
         url: "api/book/list",
         success: function (response) {

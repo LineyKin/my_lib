@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"my_lib/internal/kafka/producer"
 	"my_lib/internal/service"
 	"my_lib/models/author"
 	"my_lib/models/book"
@@ -108,6 +111,21 @@ func (ctrl *Controller) AddAuthor(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// data for kafka
+	authorInBytes, err := json.Marshal(author)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	// Send the bytes to kafka
+	err = producer.PushLogToQueue("my_lib_log", authorInBytes)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"author_id": id})
 }
 
@@ -148,6 +166,14 @@ func (ctrl *Controller) GetBookList(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	isAuto := c.Query("isAuto")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	fmt.Println("isAuto:", isAuto)
 
 	c.JSON(http.StatusOK, gin.H{"book_list": bookList})
 }
