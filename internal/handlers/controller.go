@@ -150,16 +150,7 @@ func (ctrl *Controller) GetBookList(c *gin.Context) {
 	}
 
 	sortedBy := c.Query("sortedBy")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
 	sortType := c.Query("sortType")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
 	bookList, err := ctrl.service.GetBookList(limit, offset, sortedBy, sortType)
 	if err != nil {
@@ -168,10 +159,6 @@ func (ctrl *Controller) GetBookList(c *gin.Context) {
 	}
 
 	isAuto := c.Query("isAuto")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
 	fmt.Println("isAuto:", isAuto)
 
