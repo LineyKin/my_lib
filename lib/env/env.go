@@ -8,6 +8,7 @@ import (
 
 const port_key string = "PORT"
 const db_key string = "DBFILE"
+const kafka_port_key = "KAFKA_PORT"
 
 func getByKey(key string) string {
 	err := env.Load(".ENV")
@@ -30,4 +31,8 @@ func GetPort() string {
 
 func GetDbName() string {
 	return getByKey(db_key)
+}
+
+func GetKafkaPort() string {
+	return getByKey(kafka_port_key)
 }
